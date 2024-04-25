@@ -1,10 +1,10 @@
 package com.beemer.unofficial.fromis_9.view.screen
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.ripple.LocalRippleTheme
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -12,6 +12,7 @@ import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -28,6 +29,7 @@ import com.beemer.unofficial.fromis_9.ui.theme.Gray
 import com.beemer.unofficial.fromis_9.ui.theme.NanumSquareRoundBold
 import com.beemer.unofficial.fromis_9.ui.theme.Primary
 import com.beemer.unofficial.fromis_9.ui.theme.Transparent
+import com.beemer.unofficial.fromis_9.view.utils.NoRippleTheme
 
 @Composable
 fun MainScreen() {
@@ -52,52 +54,53 @@ fun BottomNavigation(navController: NavHostController) {
         BottomNavItem.Schedule,
     )
 
-    NavigationBar(
-        modifier = Modifier,
-        containerColor = Transparent
-    ) {
-        val navBackStackEntry by navController.currentBackStackEntryAsState()
-        val currentRoute = navBackStackEntry?.destination?.route
+    CompositionLocalProvider(LocalRippleTheme provides NoRippleTheme) {
+        NavigationBar(
+            modifier = Modifier,
+            containerColor = Transparent
+        ) {
+            val navBackStackEntry by navController.currentBackStackEntryAsState()
+            val currentRoute = navBackStackEntry?.destination?.route
 
-        items.forEach { item ->
-            NavigationBarItem(
-                icon = {
-                       Icon(
-                           painter = painterResource(id = item.icon),
-                           contentDescription = stringResource(id = item.title),
-                           modifier = Modifier
-                               .width(24.dp)
-                               .height(24.dp)
-                       )
-                },
-                label = {
+            items.forEach { item ->
+                NavigationBarItem(
+                    icon = {
+                        Icon(
+                            painter = painterResource(id = item.icon),
+                            contentDescription = stringResource(id = item.title),
+                            modifier = Modifier
+                                .width(24.dp)
+                                .height(24.dp)
+                        )
+                    },
+                    label = {
                         Text(
                             text = stringResource(id = item.title),
                             fontSize = 12.sp,
                             fontFamily = NanumSquareRoundBold
                         )
-                },
-                selected = currentRoute == item.screenRoute,
-                onClick = {
-                    navController.navigate(item.screenRoute) {
-                        navController.graph.startDestinationRoute?.let {
-                            popUpTo(it) {
-                                saveState = true
+                    },
+                    selected = currentRoute == item.screenRoute,
+                    onClick = {
+                        navController.navigate(item.screenRoute) {
+                            navController.graph.startDestinationRoute?.let {
+                                popUpTo(it) {
+                                    saveState = true
+                                }
                             }
+                            launchSingleTop = true
+                            restoreState = true
                         }
-                        launchSingleTop = true
-                        restoreState = true
-                    }
-                },
-                colors = NavigationBarItemDefaults.colors(
-                    selectedIconColor = Primary,
-                    unselectedIconColor = Gray,
-                    selectedTextColor = Primary,
-                    unselectedTextColor = Gray,
-                    indicatorColor = Transparent
-                ),
-                modifier = Modifier.clickable { }
-            )
+                    },
+                    colors = NavigationBarItemDefaults.colors(
+                        selectedIconColor = Primary,
+                        unselectedIconColor = Gray,
+                        selectedTextColor = Primary,
+                        unselectedTextColor = Gray,
+                        indicatorColor = Transparent
+                    )
+                )
+            }
         }
     }
 }
