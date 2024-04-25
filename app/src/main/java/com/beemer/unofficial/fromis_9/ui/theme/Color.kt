@@ -7,6 +7,8 @@ val OnPrimary = Color(0xFF000000)
 val Secondary = Color(0xFFDA75A1)
 val OnSecondary = Color(0xFFFFFFFF)
 val Surface = Color(0xFFFFFFFF)
+val SurfaceVariant = Color(0xFFFFFFFF)
+val SurfaceTint = Color(0xFFFFFFFF)
 
 val Black = Color(0xFF000000)
 val White = Color(0xFFFFFFFF)

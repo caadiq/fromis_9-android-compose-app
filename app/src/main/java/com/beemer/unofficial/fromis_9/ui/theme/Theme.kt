@@ -29,7 +29,9 @@ private val LightColorScheme = lightColorScheme(
     secondary = Secondary,
     onSecondary = OnSecondary,
     surface = Surface,
-    background = White
+    surfaceVariant = SurfaceVariant,
+    surfaceTint = SurfaceTint,
+    background = White,
 )
 
 @Composable

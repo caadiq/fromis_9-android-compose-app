@@ -109,7 +109,7 @@ fun BottomNavigation(navController: NavHostController) {
 fun NavigationGraph(navController: NavHostController) {
      NavHost(navController = navController, startDestination = BottomNavItem.Home.screenRoute) {
          composable(BottomNavItem.Home.screenRoute) {
-             ScreenHome()
+             HomeScreen()
          }
          composable(BottomNavItem.Video.screenRoute) {
              VideoScreen()
