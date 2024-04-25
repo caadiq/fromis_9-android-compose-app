@@ -6,7 +6,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -27,7 +29,9 @@ import com.beemer.unofficial.fromis_9.ui.theme.NanumSquareRoundExtraBold
 @Composable
 fun HomeScreen() {
     Column(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
     ) {
         CenterAlignedTopAppBar(
             title = {
@@ -64,7 +68,10 @@ fun HomeScreen() {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 16.dp)
+                .padding(
+                    top = 16.dp,
+                    bottom = 16.dp
+                )
         ) {
             HomeCard(
                 modifier = Modifier
