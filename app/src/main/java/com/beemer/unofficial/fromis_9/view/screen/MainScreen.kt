@@ -127,10 +127,10 @@ fun NavigationGraph(navController: NavHostController) {
         navController = navController,
         startDestination = BottomNavItem.Home.screenRoute,
         enterTransition = {
-            fadeIn(animationSpec = tween(200))
+            fadeIn(animationSpec = tween(100))
         },
         exitTransition = {
-            fadeOut(animationSpec = tween(200))
+            fadeOut(animationSpec = tween(100))
         }
     ) {
          composable(BottomNavItem.Home.screenRoute) {
