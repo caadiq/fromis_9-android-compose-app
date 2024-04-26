@@ -43,7 +43,7 @@ import com.beemer.unofficial.fromis_9.view.utils.NoRippleTheme
 
 @Composable
 fun AlbumListScreen() {
-    val items = listOf("발매", "타이틀", "분류")
+    val items = listOf("발매일", "타이틀", "분류")
     val (isChecked, setChecked) = remember { mutableStateOf(false) }
 
     CompositionLocalProvider(LocalRippleTheme provides NoRippleTheme) {
@@ -54,9 +54,9 @@ fun AlbumListScreen() {
         ) {
             Row(
                 modifier = Modifier
+                    .padding(top = 24.dp)
                     .fillMaxWidth()
-                    .height(56.dp)
-                    .padding(top = 16.dp),
+                    .height(44.dp),
                 horizontalArrangement = Arrangement.Center
             ) {
                 Spacer(modifier = Modifier.weight(1f))
@@ -98,11 +98,23 @@ fun MaterialButtonToggleGroup(
     ) {
         items.forEachIndexed { index, item ->
             OutlinedButton(
-                modifier = Modifier
-                    .width(88.dp)
-                    .fillMaxHeight()
-                    .offset((-1 * index).dp, 0.dp)
-                    .zIndex(if (selectedIndex == index) 1f else 0f),
+                modifier = when (index) {
+                    0 -> Modifier
+                            .width(88.dp)
+                            .fillMaxHeight()
+                            .offset(0.dp, 0.dp)
+                            .zIndex(if (selectedIndex == index) 1f else 0f)
+                    1 -> Modifier
+                            .width(88.dp)
+                            .fillMaxHeight()
+                            .offset((-1).dp, 0.dp)
+                            .zIndex(if (selectedIndex == index) 1f else 0f)
+                    else -> Modifier
+                            .width(88.dp)
+                            .fillMaxHeight()
+                            .offset((-2.2).dp, 0.dp)
+                            .zIndex(if (selectedIndex == index) 1f else 0f)
+                },
                 onClick = {
                     onIndexSelected(index)
                     onClick(index)
