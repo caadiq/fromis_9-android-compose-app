@@ -1,8 +1,10 @@
 package com.beemer.unofficial.fromis_9.view.screen
 
-import androidx.compose.animation.EnterTransition
-import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -70,7 +72,7 @@ fun BottomNavigation(navController: NavHostController) {
 
     CompositionLocalProvider(LocalRippleTheme provides NoRippleTheme) {
         NavigationBar(
-            modifier = Modifier,
+            modifier = Modifier.fillMaxWidth(),
             containerColor = Transparent
         ) {
             val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -124,8 +126,12 @@ fun NavigationGraph(navController: NavHostController) {
     NavHost(
         navController = navController,
         startDestination = BottomNavItem.Home.screenRoute,
-        enterTransition = { EnterTransition.None },
-        exitTransition = { ExitTransition.None }
+        enterTransition = {
+            fadeIn(animationSpec = tween(250))
+        },
+        exitTransition = {
+            fadeOut(animationSpec = tween(250))
+        }
     ) {
          composable(BottomNavItem.Home.screenRoute) {
              HomeScreen(navController = navController)
