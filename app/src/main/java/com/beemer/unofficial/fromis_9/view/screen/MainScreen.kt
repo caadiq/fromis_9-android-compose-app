@@ -142,6 +142,9 @@ fun NavigationGraph(navController: NavHostController) {
          composable(BottomNavItem.Schedule.screenRoute) {
              ScheduleScreen()
          }
+        composable(Screen.Settings.route) {
+            SettingsScreen()
+        }
         composable(Screen.AlbumList.route) {
             AlbumListScreen()
         }
@@ -155,5 +158,6 @@ sealed class BottomNavItem(val title: Int, val icon: Int, val screenRoute: Strin
 }
 
 sealed class Screen(val route: String) {
+    data object Settings : Screen("SETTINGS_SCREEN")
     data object AlbumList : Screen("ALBUM_LIST_SCREEN")
 }

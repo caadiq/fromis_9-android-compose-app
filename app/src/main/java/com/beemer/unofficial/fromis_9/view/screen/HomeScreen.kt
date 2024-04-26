@@ -46,12 +46,12 @@ fun HomeScreen(navController: NavController) {
             actions = {
                 IconButton(
                     onClick = {
-
+                        navController.navigate(Screen.Settings.route)
                     }
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.icon_clover),
-                        contentDescription = "앱 정보"
+                        contentDescription = "설정"
                     )
                 }
             }
