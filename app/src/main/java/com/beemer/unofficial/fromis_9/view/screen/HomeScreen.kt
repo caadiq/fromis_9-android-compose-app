@@ -21,13 +21,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.beemer.unofficial.fromis_9.R
 import com.beemer.unofficial.fromis_9.ui.theme.DarkGray
 import com.beemer.unofficial.fromis_9.ui.theme.NanumSquareRoundExtraBold
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen() {
+fun HomeScreen(navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -83,7 +84,7 @@ fun HomeScreen() {
                 imageResource = R.drawable.image_album,
                 text = "앨범",
                 onClick = {
-
+                    navController.navigate(Screen.AlbumList.route)
                 }
             )
 
@@ -111,7 +112,8 @@ fun HomeCard(imageResource: Int, text: String, modifier: Modifier = Modifier, on
         shape = RoundedCornerShape(8.dp),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 4.dp
-        )
+        ),
+        onClick = onClick
     ) {
         Image(
             modifier = Modifier.fillMaxWidth(),
