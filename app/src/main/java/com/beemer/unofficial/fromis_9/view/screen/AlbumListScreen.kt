@@ -3,6 +3,7 @@ package com.beemer.unofficial.fromis_9.view.screen
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -125,7 +126,8 @@ fun MaterialButtonToggleGroup(
                         containerColor = Surface,
                         contentColor = Primary
                     )
-                }
+                },
+                contentPadding = PaddingValues(0.dp)
             ) {
                 Text(
                     text = item,
