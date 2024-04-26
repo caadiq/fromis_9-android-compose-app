@@ -21,7 +21,6 @@ import androidx.compose.material.ripple.LocalRippleTheme
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconToggleButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -153,7 +152,7 @@ fun MaterialButtonToggleGroup(
                     fontSize = 14.sp,
                     fontFamily = NanumSquareRoundExtraBold,
                     color = if (selectedIndex == index) {
-                        MaterialTheme.colorScheme.primary
+                        Primary
                     } else {
                         Gray
                     }
