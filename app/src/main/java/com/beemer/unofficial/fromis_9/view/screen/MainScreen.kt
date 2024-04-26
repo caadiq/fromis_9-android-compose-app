@@ -1,8 +1,10 @@
 package com.beemer.unofficial.fromis_9.view.screen
 
-import androidx.compose.animation.EnterTransition
-import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -16,6 +18,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -37,9 +41,19 @@ import com.beemer.unofficial.fromis_9.view.utils.NoRippleTheme
 fun MainScreen() {
     val navController = rememberNavController()
 
+    val currentRoute = remember {
+        mutableStateOf("")
+    }
+
+    navController.addOnDestinationChangedListener { _, destination, _ ->
+        currentRoute.value = destination.route ?: ""
+    }
+
     Scaffold(
         bottomBar = {
-            BottomNavigation(navController = navController)
+            if (currentRoute.value in listOf(BottomNavItem.Home.screenRoute, BottomNavItem.Video.screenRoute, BottomNavItem.Schedule.screenRoute)) {
+                BottomNavigation(navController = navController)
+            }
         }
     ) {
         Box(Modifier.padding(it)) {
@@ -58,7 +72,7 @@ fun BottomNavigation(navController: NavHostController) {
 
     CompositionLocalProvider(LocalRippleTheme provides NoRippleTheme) {
         NavigationBar(
-            modifier = Modifier,
+            modifier = Modifier.fillMaxWidth(),
             containerColor = Transparent
         ) {
             val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -112,11 +126,15 @@ fun NavigationGraph(navController: NavHostController) {
     NavHost(
         navController = navController,
         startDestination = BottomNavItem.Home.screenRoute,
-        enterTransition = { EnterTransition.None },
-        exitTransition = { ExitTransition.None }
+        enterTransition = {
+            fadeIn(animationSpec = tween(250))
+        },
+        exitTransition = {
+            fadeOut(animationSpec = tween(250))
+        }
     ) {
          composable(BottomNavItem.Home.screenRoute) {
-             HomeScreen()
+             HomeScreen(navController = navController)
          }
          composable(BottomNavItem.Video.screenRoute) {
              VideoScreen()
@@ -124,6 +142,12 @@ fun NavigationGraph(navController: NavHostController) {
          composable(BottomNavItem.Schedule.screenRoute) {
              ScheduleScreen()
          }
+        composable(Screen.Settings.route) {
+            SettingsScreen()
+        }
+        composable(Screen.AlbumList.route) {
+            AlbumListScreen()
+        }
      }
 }
 
@@ -131,4 +155,9 @@ sealed class BottomNavItem(val title: Int, val icon: Int, val screenRoute: Strin
     data object Home : BottomNavItem(title = R.string.str_bottom_nav_home, icon = R.drawable.icon_home, screenRoute = "HOME")
     data object Video : BottomNavItem(title = R.string.str_bottom_nav_video, icon = R.drawable.icon_video, screenRoute = "VIDEO")
     data object Schedule : BottomNavItem(title = R.string.str_bottom_nav_schedule, icon = R.drawable.icon_calendar, screenRoute = "SCHEDULE")
+}
+
+sealed class Screen(val route: String) {
+    data object Settings : Screen("SETTINGS_SCREEN")
+    data object AlbumList : Screen("ALBUM_LIST_SCREEN")
 }
