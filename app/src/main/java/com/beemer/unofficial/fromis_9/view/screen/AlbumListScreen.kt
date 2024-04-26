@@ -6,9 +6,13 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -50,7 +54,10 @@ fun AlbumListScreen() {
                 .verticalScroll(rememberScrollState())
         ) {
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp)
+                    .padding(top = 16.dp),
                 horizontalArrangement = Arrangement.Center
             ) {
                 Spacer(modifier = Modifier.weight(1f))
@@ -61,10 +68,19 @@ fun AlbumListScreen() {
                     }
                 )
                 IconToggleButton(
-                    modifier = Modifier.weight(1f),
-                    isChecked = isChecked,
-                    onClick = { setChecked(!isChecked) }
-                )
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .aspectRatio(1f)
+                        .weight(1f),
+                    checked = isChecked,
+                    onCheckedChange = { setChecked(!isChecked) }
+                ) {
+                    Icon(
+                        painter = if (isChecked) painterResource(id = R.drawable.icon_ascending) else painterResource(id = R.drawable.icon_descending),
+                        contentDescription = "정렬",
+                        tint = Gray
+                    )
+                }
             }
         }
     }
@@ -78,11 +94,14 @@ fun MaterialButtonToggleGroup(
     val cornerRadius = 4.dp
     val (selectedIndex, onIndexSelected) = remember { mutableIntStateOf(0) }
 
-    Row {
+    Row(
+        modifier = Modifier.height(56.dp)
+    ) {
         items.forEachIndexed { index, item ->
             OutlinedButton(
                 modifier = Modifier
                     .width(88.dp)
+                    .fillMaxHeight()
                     .offset((-1 * index).dp, 0.dp)
                     .zIndex(if (selectedIndex == index) 1f else 0f),
                 onClick = {
@@ -141,24 +160,5 @@ fun MaterialButtonToggleGroup(
                 )
             }
         }
-    }
-}
-
-@Composable
-fun IconToggleButton(
-    isChecked: Boolean,
-    modifier: Modifier,
-    onClick: () -> Unit
-) {
-    IconToggleButton(
-        modifier = modifier,
-        checked = isChecked,
-        onCheckedChange = { onClick() }
-    ) {
-        Icon(
-            painter = if (isChecked) painterResource(id = R.drawable.icon_ascending) else painterResource(id = R.drawable.icon_descending),
-            contentDescription = "정렬",
-            tint = Gray
-        )
     }
 }
