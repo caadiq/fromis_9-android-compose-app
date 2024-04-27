@@ -25,14 +25,13 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.beemer.unofficial.fromis_9.R
 import com.beemer.unofficial.fromis_9.ui.theme.Gray
 import com.beemer.unofficial.fromis_9.ui.theme.NanumSquareRoundExtraBold
@@ -40,11 +39,11 @@ import com.beemer.unofficial.fromis_9.ui.theme.Primary
 import com.beemer.unofficial.fromis_9.ui.theme.Surface
 import com.beemer.unofficial.fromis_9.ui.theme.Transparent
 import com.beemer.unofficial.fromis_9.view.utils.NoRippleTheme
+import com.beemer.unofficial.fromis_9.viewmodel.AlbumListViewModel
 
 @Composable
 fun AlbumListScreen() {
-    val items = listOf("발매일", "타이틀", "분류")
-    val (isChecked, setChecked) = remember { mutableStateOf(false) }
+    val albumListViewModel: AlbumListViewModel = viewModel()
 
     CompositionLocalProvider(LocalRippleTheme provides NoRippleTheme) {
         Column(
@@ -59,11 +58,15 @@ fun AlbumListScreen() {
                     .height(44.dp),
                 horizontalArrangement = Arrangement.Center
             ) {
+                val items = listOf("발매일", "타이틀", "분류")
+                val isDescending = albumListViewModel.isDescending.collectAsState().value
+
                 Spacer(modifier = Modifier.weight(1f))
                 MaterialButtonToggleGroup(
                     items = items,
+                    albumListViewModel = albumListViewModel,
                     onClick = { index ->
-
+                        albumListViewModel.setSortBy(index)
                     }
                 )
                 IconToggleButton(
@@ -71,11 +74,13 @@ fun AlbumListScreen() {
                         .fillMaxHeight()
                         .aspectRatio(1f)
                         .weight(1f),
-                    checked = isChecked,
-                    onCheckedChange = { setChecked(!isChecked) }
+                    checked = isDescending,
+                    onCheckedChange = { descending ->
+                        albumListViewModel.setDescending(descending)
+                    }
                 ) {
                     Icon(
-                        painter = if (isChecked) painterResource(id = R.drawable.icon_ascending) else painterResource(id = R.drawable.icon_descending),
+                        painter = if (isDescending) painterResource(id = R.drawable.icon_descending) else painterResource(id = R.drawable.icon_ascending),
                         contentDescription = "정렬",
                         tint = Gray
                     )
@@ -88,10 +93,11 @@ fun AlbumListScreen() {
 @Composable
 fun MaterialButtonToggleGroup(
     items: List<String>,
+    albumListViewModel: AlbumListViewModel,
     onClick: (index: Int) -> Unit = {}
 ) {
     val cornerRadius = 4.dp
-    val (selectedIndex, onIndexSelected) = remember { mutableIntStateOf(0) }
+    val selectedIndex = albumListViewModel.sortBy.collectAsState().value
 
     Row(
         modifier = Modifier.height(56.dp)
@@ -100,10 +106,10 @@ fun MaterialButtonToggleGroup(
             OutlinedButton(
                 modifier = when (index) {
                     0 -> Modifier
-                            .width(88.dp)
-                            .fillMaxHeight()
-                            .offset(0.dp, 0.dp)
-                            .zIndex(if (selectedIndex == index) 1f else 0f)
+                        .width(88.dp)
+                        .fillMaxHeight()
+                        .offset(0.dp, 0.dp)
+                        .zIndex(if (selectedIndex == index) 1f else 0f)
                     1 -> Modifier
                             .width(88.dp)
                             .fillMaxHeight()
@@ -116,7 +122,6 @@ fun MaterialButtonToggleGroup(
                             .zIndex(if (selectedIndex == index) 1f else 0f)
                 },
                 onClick = {
-                    onIndexSelected(index)
                     onClick(index)
                 },
                 shape = when (index) {
